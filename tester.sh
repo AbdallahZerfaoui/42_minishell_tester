@@ -89,8 +89,7 @@ main() {
 		echo "  🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀"
 		echo -e "  🚀                                \033[1;34mMANDATORY\033[m                                   🚀"
 		echo "  🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀"
-		echo "$TESTFILES"
-		# test_mandatory
+		test_mandatory
 	elif [[ $1 == "vm" ]] ; then
 		echo "  🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀"
 		echo -e "  🚀                             \033[1;34mMANDATORY_LEAKS\033[m                                🚀"
@@ -160,12 +159,16 @@ test_mandatory_leaks() {
 }
 
 test_mandatory() {
-	FILES="${RUNDIR}/cmds/mand/*"
+	FILES="${RUNDIR}/cmds/mand/* ${RUNDIR}/cmds/subsets/*"
 	for file in $FILES
 	do
-		if [[ $TESTFILES =~ $file ]] || [ -z $TESTFILES ]
+		if [[ $TESTFILES =~ $file ]]
 		then
 			test_from_file $file
+		elif  [ -z $TESTFILES ] && [[ "$file" == "${RUNDIR}/cmds/mand/"* ]]
+		then
+			test_from_file $file
+
 		fi
 	done
 }
